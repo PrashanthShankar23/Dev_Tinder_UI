@@ -14,7 +14,6 @@ const Connections = () => {
       });
 
       dispatch(addConnections(res.data?.data));
-      console.log(res);
     } catch (err) {
       //Handle error
     }
@@ -40,10 +39,13 @@ const Connections = () => {
     <div className="text-center my-10 ">
       <h1 className="font-bold text-3xl">Connections</h1>
       {connections.map((connection) => {
-        const { age, gender, photoUrl, firstName, lastName, about } =
+        const { _id, age, gender, photoUrl, firstName, lastName, about } =
           connection;
         return (
-          <div className="flex m-4 p-4 rounded-lg bg-base-300 w-1/2 mx-auto">
+          <div
+            key={_id}
+            className="flex m-4 p-4 rounded-lg bg-base-300 w-1/2 mx-auto"
+          >
             <div>
               <img
                 alt="photo"

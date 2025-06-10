@@ -2,15 +2,15 @@ import axios from "axios";
 import { BASE_URL } from "../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
 import { addFeed } from "../utils/feedSlice";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import UserCard from "./UserCard";
+import Error from "./Error";
 
 const Feed = () => {
   let feed = useSelector((store) => store.feed);
+  const [isError, setIsError] = useState(false);
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const getFeed = async () => {
     if (feed) return;
@@ -20,13 +20,26 @@ const Feed = () => {
       });
       dispatch(addFeed(res?.data?.data));
     } catch (err) {
-      return navigate("/error");
+      setIsError(true);
     }
   };
 
   useEffect(() => {
     getFeed();
   }, []);
+
+  if (isError) {
+    return <Error message={"Error! Unable to load feed"} />;
+  }
+  if (!feed) return;
+
+  if (feed && feed.length === 0) {
+    return (
+      <div className="flex justify-center my-10 ">
+        <h1 className="font-bold text-xl text-pink">No New Users found!</h1>
+      </div>
+    );
+  }
   return (
     feed && (
       <div className="flex justify-center my-10">
